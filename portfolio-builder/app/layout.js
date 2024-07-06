@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en" >
         <body className={inter.className}>
-          <div data-theme="dark" className="h-screen">
+          <div data-theme="dark" className="">
             {children}
             <ToastContainer />
           </div>

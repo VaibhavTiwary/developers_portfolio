@@ -6,6 +6,8 @@ import { eq } from 'drizzle-orm'
 import { check } from 'drizzle-orm/mysql-core'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
+import FormContent from './_components/FormContent'
+import MobilePreview from './_components/MobilePreview'
 
 function Admin() {
 
@@ -27,7 +29,16 @@ function Admin() {
 
     }
     return (
-        <div>Admin page</div>
+        <div>
+            <div className='grid grid-cols-1 lg:grid-cols-3'>
+                <div className='col-span-2'>
+                    <FormContent />
+                </div>
+                <div>
+                    <MobilePreview />
+                </div>
+            </div>
+        </div>
     )
 }
 
