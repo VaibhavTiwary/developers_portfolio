@@ -1,5 +1,6 @@
 import React from 'react'
 import SideNav from './_components/SideNav'
+import Provider from './Provider'
 
 function AdminLayout({ children }) {
     return (
@@ -9,7 +10,10 @@ function AdminLayout({ children }) {
             </div>
 
             <div className='ml-24'>
-                {children}
+                <Provider>
+                    {children}
+                </Provider>
+
             </div>
 
 
