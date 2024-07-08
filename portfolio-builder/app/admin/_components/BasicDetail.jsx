@@ -6,20 +6,23 @@ import { useUser } from '@clerk/nextjs';
 import { eq } from 'drizzle-orm';
 import { ref, uploadBytes } from 'firebase/storage';
 import { Camera, Link2, MapIcon, MapPin } from 'lucide-react'
+import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
+const BASE_URL = 'https://firebasestorage.googleapis.com/v0/b/projects69.appspot.com/o/';
 function BasicDetail() {
 
     let timeoutId;
     const { user } = useUser();
     const { userDetail, setUserDetail } = useContext(UserDetailContext);
-
+    const [profileImage, setProfileImage] = useState();
     const [selectedOption, setSelectedOption] = useState();
+
     useEffect(() => {
-        userDetail && console.log(userDetail);
-    })
+        userDetail && setProfileImage(userDetail?.profileImage);
+    }) && console.log(userDetail)
     /**
      * used to save user info
      * @param {*} event 
@@ -52,8 +55,23 @@ function BasicDetail() {
         const fileName = Date.now().toString() + '.' + file.type.split('/')[1];
         const storageRef = ref(storage, fileName);
 
-        uploadBytes(storageRef, file).then((snapshot) => {
+        uploadBytes(storageRef, file).then(async (snapshot) => {
             console.log('Uploaded a blob or file!');
+            const result = await db.update(userInfo).set({
+                profileImage: fileName + "?alt=media"
+            }).where(eq(userInfo.email, user?.primaryEmailAddress.emailAddress))
+
+            if (result) {
+                setProfileImage(fileName + "?alt=media")
+                toast.success('Saved!', {
+                    position: 'top-right'
+                })
+            }
+            else {
+                toast.error('Error', {
+                    position: 'top-right'
+                })
+            }
         });
     }
 
@@ -63,12 +81,20 @@ function BasicDetail() {
         <div className='p-7 rounded-lg bg-gray-600 my-7'>
             <div className='flex gap-6 items-center'>
 
-                <label htmlFor='file-input'>
-                    <Camera className='p-3 h-12 w-12 bg-gray-500 rounded-full cursor-pointer' />
-                </label>
+                {profileImage ?
+                    <label htmlFor='file-input' className='cursor-pointer'>
+                        <Image src={BASE_URL + profileImage} width={40} height={40} alt='ProfileImage' />
+                    </label>
+                    : <div>
+                        <label htmlFor='file-input'>
+                            <Camera className='p-3 h-12 w-12 bg-gray-500 rounded-full cursor-pointer' />
+                        </label>
+
+                    </div>}
                 <input type='file' id='file-input'
                     onChange={handleFileUpload} accept='image/png, image/gif, image/jpeg'
-                    style={{ display: 'none' }}></input>
+                    style={{ display: 'none' }} />
+
 
                 <input type="text" placeholder="Username"
                     defaultValue={userDetail?.name}
