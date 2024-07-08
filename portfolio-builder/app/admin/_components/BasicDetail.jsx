@@ -10,6 +10,7 @@ import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { TwicImg, TwicPicture } from "@twicpics/components/react";
 
 const BASE_URL = 'https://firebasestorage.googleapis.com/v0/b/projects69.appspot.com/o/';
 function BasicDetail() {
@@ -83,7 +84,9 @@ function BasicDetail() {
 
                 {profileImage ?
                     <label htmlFor='file-input' className='cursor-pointer'>
-                        <Image src={BASE_URL + profileImage} width={40} height={40} alt='ProfileImage' />
+                        {/* <Image src={BASE_URL + profileImage} width={40} height={40} alt='ProfileImage' /> */}
+                        {/* <TwicImg src={profileImage} /> */}
+                        <TwicPicture src={profileImage} className='w-[50px] h-[50px] rounded-full'></TwicPicture>
                     </label>
                     : <div>
                         <label htmlFor='file-input'>

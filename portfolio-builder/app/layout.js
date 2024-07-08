@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ToastContainer } from "react-toastify";
+import { TwicInstall } from "@twicpics/components/react";
+import "@twicpics/components/style.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,6 +18,10 @@ export default function RootLayout({ children }) {
       <html lang="en" >
         <body className={inter.className}>
           <div data-theme="dark" className="">
+            <TwicInstall
+              // domain is mandatory
+              domain="https://vaibhav.twic.pics"
+            />
             {children}
             <ToastContainer />
           </div>
