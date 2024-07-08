@@ -1,8 +1,10 @@
 import { UserDetailContext } from '@/app/_context/UserDetailContext';
 import { db } from '@/utils';
+import { storage } from '@/utils/firebaseConfig';
 import { userInfo } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import { eq } from 'drizzle-orm';
+import { ref, uploadBytes } from 'firebase/storage';
 import { Camera, Link2, MapIcon, MapPin } from 'lucide-react'
 import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
@@ -47,7 +49,12 @@ function BasicDetail() {
 
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
-        console.log(file)
+        const fileName = Date.now().toString() + '.' + file.type.split('/')[1];
+        const storageRef = ref(storage, fileName);
+
+        uploadBytes(storageRef, file).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+        });
     }
 
 
@@ -55,6 +62,7 @@ function BasicDetail() {
     return (
         <div className='p-7 rounded-lg bg-gray-600 my-7'>
             <div className='flex gap-6 items-center'>
+
                 <label htmlFor='file-input'>
                     <Camera className='p-3 h-12 w-12 bg-gray-500 rounded-full cursor-pointer' />
                 </label>
