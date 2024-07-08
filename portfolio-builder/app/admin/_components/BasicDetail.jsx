@@ -3,8 +3,8 @@ import { db } from '@/utils';
 import { userInfo } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import { eq } from 'drizzle-orm';
-import { Camera } from 'lucide-react'
-import React, { useContext, useEffect } from 'react'
+import { Camera, Link2, MapIcon, MapPin } from 'lucide-react'
+import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,6 +14,7 @@ function BasicDetail() {
     const { user } = useUser();
     const { userDetail, setUserDetail } = useContext(UserDetailContext);
 
+    const [selectedOption, setSelectedOption] = useState();
     useEffect(() => {
         userDetail && console.log(userDetail);
     })
@@ -43,10 +44,24 @@ function BasicDetail() {
             }
         }, 1000)
     }
+
+    const handleFileUpload = (event) => {
+        const file = event.target.files[0];
+        console.log(file)
+    }
+
+
+
     return (
         <div className='p-7 rounded-lg bg-gray-600 my-7'>
             <div className='flex gap-6 items-center'>
-                <Camera className='p-3 h-12 w-12 bg-gray-500 rounded-full' />
+                <label htmlFor='file-input'>
+                    <Camera className='p-3 h-12 w-12 bg-gray-500 rounded-full cursor-pointer' />
+                </label>
+                <input type='file' id='file-input'
+                    onChange={handleFileUpload} accept='image/png, image/gif, image/jpeg'
+                    style={{ display: 'none' }}></input>
+
                 <input type="text" placeholder="Username"
                     defaultValue={userDetail?.name}
                     onChange={(event) => onInputChange(event, 'name')}
@@ -55,6 +70,39 @@ function BasicDetail() {
             <textarea className="textarea textarea-bordered mt-3 w-full" placeholder="Start Writing about yourself"
                 defaultValue={userDetail?.bio} onChange={(event) => onInputChange(event, 'bio')}
             ></textarea>
+
+            <div>
+                <div className='flex gap-3 mt-6'>
+                    <MapPin className={`h-12 w-12 p-3 text-blue-500 rounded-md hover:bg-gray-500
+                    ${selectedOption == 'location' && 'bg-gray-600'}`}
+                        onClick={() => setSelectedOption('location')} />
+                    <Link2 className={`h-12 w-12 p-3 text-yellow-500 rounded-md hover:bg-gray-500
+                    ${selectedOption == 'link' && 'bg-gray-600'}`}
+                        onClick={() => setSelectedOption('link')} />
+                </div>
+            </div>
+
+            {selectedOption == 'location' ?
+                <div className='mt-2'>
+                    <label className="input input-bordered flex items-center gap-2">
+                        <MapPin />
+                        <input type="text" className="grow" placeholder="Location"
+                            key={1}
+                            defaultValue={userDetail?.location}
+                            onChange={(event) => onInputChange(event, 'location')} />
+                    </label>
+                </div> :
+                selectedOption == 'link' ?
+                    <div className='mt-2'>
+                        <label className="input input-bordered flex items-center gap-2">
+                            <Link2 />
+                            <input type="text" className="grow" placeholder="URL"
+                                key={2}
+                                defaultValue={userDetail?.link}
+                                onChange={(event) => onInputChange(event, 'link')} />
+                        </label>
+                    </div> : null}
+
         </div>
     )
 }
