@@ -1,5 +1,5 @@
 // const { varchar } = require("drizzle-orm/mysql-core");
-import { integer, pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
 
 export const userInfo = pgTable('userInfo', {
     id: serial('id').primaryKey(),
@@ -20,6 +20,7 @@ export const projects = pgTable('projects', {
     logo: varchar('logo'),
     banner: varchar('banner'),
     category: varchar('category'),
+    active: boolean('active').$default(true),
     emailRef: varchar('emailRef'),
     userRef: integer('userRef').references(() => userInfo?.id)
 })

@@ -23,6 +23,7 @@ function AddProject() {
             emailRef: user?.primaryEmailAddress.emailAddress,
             userRef: userDetail?.id
         })
+        setOpenUrlInput(false)
         if (result) {
             setLoading(false)
             toast.success('New Project Added!', {
@@ -47,7 +48,9 @@ function AddProject() {
                         <input type="url" className="grow" defaultValue={'https://'} placeholder="Project URL" />
 
                     </label>
-                    <button type='submit' className=' btn btn-secondary w-full'>+ Add New Project</button>
+                    <button type='submit'
+                        disabled={loading}
+                        className=' btn btn-secondary w-full'>+ Add New Project</button>
                 </form>
             }
 
