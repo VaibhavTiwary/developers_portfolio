@@ -37,7 +37,7 @@ function FormContent() {
             <BasicDetail />
             <hr className='my-5'></hr>
             <AddProject />
-            <ProjectListEdit projectList={projectList} />
+            <ProjectListEdit projectList={projectList} refreshData={getProjectList} />
         </div>
     )
 }

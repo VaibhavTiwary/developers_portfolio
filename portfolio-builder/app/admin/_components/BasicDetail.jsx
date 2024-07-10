@@ -64,6 +64,7 @@ function BasicDetail() {
 
             if (result) {
                 setProfileImage(fileName + "?alt=media")
+                refreshData()
                 toast.success('Saved!', {
                     position: 'top-right'
                 })
@@ -102,7 +103,7 @@ function BasicDetail() {
                 <input type="text" placeholder="Username"
                     defaultValue={userDetail?.name}
                     onChange={(event) => onInputChange(event, 'name')}
-                    className="input input-bordered w-full " />
+                    className="input input-bordered w-full font-medium " />
             </div>
             <textarea className="textarea textarea-bordered mt-3 w-full" placeholder="Start Writing about yourself"
                 defaultValue={userDetail?.bio} onChange={(event) => onInputChange(event, 'bio')}
